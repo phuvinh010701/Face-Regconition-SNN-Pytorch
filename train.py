@@ -14,7 +14,7 @@ class face_dataset():
     def __getitem__(self, index):
         y = np.random.randint(2, size=1)[0]
 
-        if y == 1:
+        if y == 0:
             # name = np.random.choice(f[i], 2, replace=False)
             index_temp = np.random.randint(len(self.path_img))
             while index_temp == index:
@@ -80,7 +80,7 @@ def main():
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     siamese_dataset = face_dataset(
         args.folder_path,
-        transforms=transforms.Compose([transforms.Resize((105,105)), transforms.RandomAffine(15),transforms.ToTensor()]),
+        transforms=transforms.Compose([transforms.Resize((105,105)),transforms.ToTensor()]),
     )
 
     train_dataloader = torch.utils.data.DataLoader(
