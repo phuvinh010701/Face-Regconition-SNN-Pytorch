@@ -41,11 +41,11 @@ class face_dataset():
     def __len__(self):
         return len(self.path_img)
 
-def train(model, train_dataloader, optimizer, criterion):
+def train(model, train_dataloader, optimizer, criterion, epochs):
     loss=[] 
     counter=[]
     iteration_number = 0
-    for epoch in range(1,):
+    for epoch in range(1, epochs):
         for i, data in enumerate(train_dataloader,0):
             img0, img1 , label = data
             img0, img1 , label = img0.cuda(), img1.cuda() , label.cuda()
@@ -67,6 +67,8 @@ def parser():
                         help="path to folder contain images")                  
     parser.add_argument("--batch_size", default=16, type=int,
                         help="number of images to be processed at the same time")
+    parser.add_argument("--epochs", default=20, type=int,
+                    help="number of epochs")
     return parser.parse_args()
 
 def main():
@@ -83,7 +85,7 @@ def main():
     train_dataloader = torch.utils.data.DataLoader(
         siamese_dataset, shuffle=True, num_workers=8, batch_size=args.batch_size
     )
-    model = train(net, train_dataloader, optimizer, criterion)
+    model = train(net, train_dataloader, optimizer, criterion, args.epochs)
     torch.save(model.state_dict(), "output/model.pt")
     print("Model Saved Successfully") 
 
