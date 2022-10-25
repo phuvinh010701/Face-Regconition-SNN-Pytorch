@@ -51,13 +51,16 @@ class contrastive_loss(nn.Module):
         self.margin = margin
 
     def forward(self, x0, x1, y):
+        
+        dist = torch.cdist(x0, x1)
+        max_= torch.clamp(self.margin - dist, min=0.0)
+        loss = (1 - y) * pow(dist, 2) + y * torch.pow(max_, 2)
+        # diff = x0 - x1
+        # dist_sq = torch.sum(torch.pow(diff, 2), 1)
+        # dist = torch.sqrt(dist_sq)
 
-        diff = x0 - x1
-        dist_sq = torch.sum(torch.pow(diff, 2), 1)
-        dist = torch.sqrt(dist_sq)
-
-        mdist = self.margin - dist
-        dist = torch.clamp(mdist, min=0.0)
-        loss = y * torch.pow(dist_sq, 2) + (1 - y) * torch.pow(dist, 2)
-        loss = torch.sum(loss) / 2.0 / x0.size(0)
+        # mdist = self.margin - dist
+        # dist = torch.clamp(mdist, min=0.0)
+        # loss = y * torch.pow(dist_sq, 2) + (1 - y) * torch.pow(dist, 2)
+        loss = torch.sum(loss) / 2.0 / x0.size()
         return loss
