@@ -14,7 +14,7 @@ class face_dataset():
     def __getitem__(self, index):
         y = np.random.randint(2, size=1)
 
-        if y == 0:
+        if y == 1:
             # name = np.random.choice(f[i], 2, replace=False)
             index_temp = np.random.randint(len(self.path_img))
             while index_temp == index:
@@ -31,7 +31,7 @@ class face_dataset():
         
         img1 = img1.convert("L")
         img2 = img2.convert("L")
-        # print(img1)
+        print(path_img1, path_img2, y)
         # print(img2)
         if self.transforms is not None:
             img1 = self.transforms(img1)
@@ -47,17 +47,18 @@ def train(model, train_dataloader, optimizer, criterion, epochs):
     iteration_number = 0
     for epoch in range(1, epochs):
         for i, data in enumerate(train_dataloader,0):
-            img0, img1 , label = data
-            img0, img1 , label = img0.cuda(), img1.cuda() , label.cuda()
-            optimizer.zero_grad()
-            output1,output2 = model(img0,img1)
-            loss_contrastive = criterion(output1,output2,label)
-            loss_contrastive.backward()
-            optimizer.step()    
-        print("Epoch {}\n Current loss {}\n".format(epoch,loss_contrastive.item()))
-        iteration_number += 10
-        counter.append(iteration_number)
-        loss.append(loss_contrastive.item())
+            # img0, img1 , label = data
+            # img0, img1 , label = img0.cuda(), img1.cuda() , label.cuda()
+            # optimizer.zero_grad()
+            # output1,output2 = model(img0,img1)
+            # loss_contrastive = criterion(output1,output2,label)
+            # loss_contrastive.backward()
+            # optimizer.step()
+            print()    
+        # print("Epoch {}\n Current loss {}\n".format(epoch,loss_contrastive.item()))
+        # iteration_number += 10
+        # counter.append(iteration_number)
+        # loss.append(loss_contrastive.item())
  
     return model
 
