@@ -31,12 +31,11 @@ class siamese(nn.Module):
             
             nn.Linear(1024, 128),
             nn.ReLU(inplace=True),
-            
-            nn.Linear(128,2))
+        )
         
     def forward_once(self, x):
         output = self.cnn(x)
-        output = output.view(output.size()[0], -1)
+        output = output.view(output.size(), -1)
         output = self.fc(output)
         return output
 
@@ -47,7 +46,7 @@ class siamese(nn.Module):
 
 class contrastive_loss(nn.Module):
 
-    def __init__(self, margin=1.0):
+    def __init__(self, margin=2.0):
         super(contrastive_loss, self).__init__()
         self.margin = margin
 
@@ -60,5 +59,5 @@ class contrastive_loss(nn.Module):
         mdist = self.margin - dist
         dist = torch.clamp(mdist, min=0.0)
         loss = y * torch.pow(dist_sq, 2) + (1 - y) * torch.pow(dist, 2)
-        loss = torch.sum(loss) / 2.0 / x0.size()[0]
+        loss = torch.sum(loss) / 2.0 / x0.size(0)
         return loss
