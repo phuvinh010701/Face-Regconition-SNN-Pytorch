@@ -20,7 +20,7 @@ class face_dataset():
             while index_temp == index:
                 index_temp = np.random.randint(len(self.path_img))
             path_img1 = np.random.choice(self.path_img[index], 1)[0]
-            path_img2 = np.random.choice(self.path_img[index], 1)[0]
+            path_img2 = np.random.choice(self.path_img[index_temp], 1)[0]
             # print(path_img1, path_img2)
             img1 = Image.open(path_img1[2:])
             img2 = Image.open(path_img2[2:])
