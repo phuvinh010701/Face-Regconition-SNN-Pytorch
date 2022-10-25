@@ -59,6 +59,6 @@ class contrastive_loss(nn.Module):
 
         mdist = self.margin - dist
         dist = torch.clamp(mdist, min=0.0)
-        loss = y * dist_sq + (1 - y) * torch.pow(dist, 2)
+        loss = y * torch.pow(dist_sq, 2) + (1 - y) * torch.pow(dist, 2)
         loss = torch.sum(loss) / 2.0 / x0.size()[0]
         return loss

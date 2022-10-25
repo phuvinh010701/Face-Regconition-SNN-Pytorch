@@ -12,7 +12,7 @@ class face_dataset():
 
         # print(self.path_img)
     def __getitem__(self, index):
-        y = np.random.randint(2, size=1)
+        y = np.random.randint(2, size=1)[0]
 
         if y == 1:
             # name = np.random.choice(f[i], 2, replace=False)
