@@ -18,8 +18,8 @@ for i in range(len(list_path_img)):
 
     for subset in itertools.combinations(list_path_img[i], 2):
         
-        imgs1.append(subset[0][2:])
-        imgs2.append(subset[1][2:])
+        imgs1.append(subset[0][3:])
+        imgs2.append(subset[1][3:])
         labels.append(1)
 
         count_subset += 1
@@ -31,8 +31,8 @@ balance_data = len(imgs1)
 for i in range(balance_data):
     idx1, idx2 = np.random.randint(len(list_path_img)), np.random.randint(len(list_path_img))
     if idx1 != idx2:
-        path1 = np.random.choice(list_path_img[idx1], 1)[0][2:]
-        path2 = np.random.choice(list_path_img[idx2], 1)[0][2:]
+        path1 = np.random.choice(list_path_img[idx1], 1)[0][3:]
+        path2 = np.random.choice(list_path_img[idx2], 1)[0][3:]
         imgs1.append(path1)
         imgs2.append(path2)
         labels.append(0)

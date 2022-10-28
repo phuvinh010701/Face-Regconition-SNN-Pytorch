@@ -8,12 +8,12 @@ class face_dataset():
     def __init__(self, data_path=None, folder_path=None, transforms=None):
         
         self.transforms = transforms
-        self.data_path = pd.read_csv(data_path, header=False)
+        self.data_path = pd.read_csv(data_path, header=0)
         self.folder_path = folder_path
         
     def __getitem__(self, index):
         
-        img1_path, img2_path, y = self.data_path[index]
+        img1_path, img2_path, y = self.data_path.iloc[index]
         img1 = Image.open(img1_path)
         img2 = Image.open(img2_path)
         img1 = img1.convert("L")
@@ -27,7 +27,7 @@ class face_dataset():
         return img1, img2, y
 
     def __len__(self):
-        return len(self.path_img)
+        return len(self.data_path)
 
 def train(model, train_dataloader, optimizer, criterion, epochs):
     loss=[] 
