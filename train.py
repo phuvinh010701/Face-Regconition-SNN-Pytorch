@@ -65,6 +65,7 @@ def main():
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=0.0005)
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     siamese_dataset = face_dataset(
+        args.data_path,
         args.folder_path,
         transforms=transforms.Compose([transforms.Resize((105,105)),transforms.ToTensor()]),
     )
