@@ -29,10 +29,11 @@ class siamese(nn.Module):
             nn.ReLU(inplace=True),
             nn.Dropout2d(p=0.5),
             
-            nn.Linear(1024, 128),
-            nn.ReLU(inplace=True),
+            nn.Linear(1024, 256),
+            nn.ReLu(inplace=True),
 
-            nn.Linear(128, 4)
+            nn.Linear(256, 128)
+
         )
         
     def forward_once(self, x):
