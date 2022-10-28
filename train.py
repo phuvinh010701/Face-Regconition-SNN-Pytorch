@@ -1,36 +1,24 @@
 from PIL import Image
 from torchvision import transforms
-from glob2 import glob
-import numpy as np
 from model import *
+import pandas as pd
 import argparse
+
 class face_dataset():
-    def __init__(self, folder_image=None, transforms=None):
-        self.folder_image = folder_image
-        self.transforms = transforms
-        self.path_img = [glob(folder_face + '/*') for folder_face in glob(folder_image + '/*')]
-
-        # print(self.path_img)
-    def __getitem__(self, index):
-        y = np.random.randint(2, size=1)[0]
-
-        if y == 0:
-            # name = np.random.choice(f[i], 2, replace=False)
-            index_temp = np.random.randint(len(self.path_img))
-            while index_temp == index:
-                index_temp = np.random.randint(len(self.path_img))
-            path_img1 = np.random.choice(self.path_img[index], 1)[0]
-            path_img2 = np.random.choice(self.path_img[index_temp], 1)[0]
-            # print(path_img1, path_img2)
-            img1 = Image.open(path_img1[2:])
-            img2 = Image.open(path_img2[2:])
-        else:
-            path_img1, path_img2 = np.random.choice(self.path_img[index], 2, replace=False)
-            img1 = Image.open(path_img1[2:])
-            img2 = Image.open(path_img2[2:])
+    def __init__(self, data_path=None, folder_path=None, transforms=None):
         
+        self.transforms = transforms
+        self.data_path = pd.read_csv(data_path, header=False)
+        self.folder_path = folder_path
+        
+    def __getitem__(self, index):
+        
+        img1_path, img2_path, y = self.data_path[index]
+        img1 = Image.open(img1_path)
+        img2 = Image.open(img2_path)
         img1 = img1.convert("L")
         img2 = img2.convert("L")
+
         # print(path_img1, path_img2, y)
         # print(img2)
         if self.transforms is not None:
@@ -64,12 +52,10 @@ def train(model, train_dataloader, optimizer, criterion, epochs):
 
 def parser():
     parser = argparse.ArgumentParser(description="SNN with Pytorch")
-    parser.add_argument("--folder_path", type=str, 
-                        help="path to folder contain images")                  
-    parser.add_argument("--batch_size", default=16, type=int,
-                        help="number of images to be processed at the same time")
-    parser.add_argument("--epochs", default=20, type=int,
-                    help="number of epochs")
+    parser.add_argument("--data_path", type=str, help="number of epochs")
+    parser.add_argument("--folder_path", type=str, help="path to folder contain images")                  
+    parser.add_argument("--batch_size", default=16, type=int, help="number of images to be processed at the same time")
+    parser.add_argument("--epochs", default=20, type=int, help="number of epochs")
     return parser.parse_args()
 
 def main():
