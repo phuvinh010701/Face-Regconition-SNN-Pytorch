@@ -23,7 +23,7 @@ for i in range(len(list_path_img)):
         labels.append(1)
 
         count_subset += 1
-        if count_subset >= 3:
+        if count_subset >= 5:
             break
 
 ### Create label 0

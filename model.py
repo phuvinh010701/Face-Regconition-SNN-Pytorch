@@ -5,7 +5,7 @@ class siamese(nn.Module):
     def __init__(self):
         super(siamese, self).__init__()
         
-        self.base_model = models.resnet50(weights=True)
+        self.base_model = models.resnet101(weights=True)
         self.base_model.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
         self.base_model.fc = nn.Sequential(
             nn.Linear(2048, 128)

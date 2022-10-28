@@ -15,6 +15,7 @@ class face_dataset():
         img1_path, img2_path, y = self.data_path.iloc[index]
         img1 = Image.open(img1_path)
         img2 = Image.open(img2_path)
+
         img1 = img1.convert("L")
         img2 = img2.convert("L")
 
@@ -62,7 +63,7 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     siamese_dataset = face_dataset(
         args.data_path,
-        transforms=transforms.Compose([transforms.Resize(128),transforms.ToTensor()]),
+        transforms=transforms.Compose([transforms.Resize(96),transforms.ToTensor()]),
     )
 
     train_dataloader = torch.utils.data.DataLoader(
