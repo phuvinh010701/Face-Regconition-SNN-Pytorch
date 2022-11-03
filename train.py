@@ -31,6 +31,7 @@ def train(model, train_dataloader, optimizer, criterion, epochs):
     loss=[] 
     counter=[]
     iteration_number = 0
+    
     for epoch in range(1, epochs):
         for i, data in enumerate(train_dataloader,0):
             img0, img1 , label = data
@@ -38,10 +39,12 @@ def train(model, train_dataloader, optimizer, criterion, epochs):
             optimizer.zero_grad()
             output1,output2 = model(img0,img1)
             loss_contrastive = criterion(output1,output2,label)
+            acc = criterion.accuracy(output1, output2, label)
+            # print(label)
             loss_contrastive.backward()
             optimizer.step()
             # print()    
-        print("Epoch {}\n Current loss {}\n".format(epoch,loss_contrastive.item()))
+        print("Epoch {} - Current loss: {}, current acc: {}\n".format(epoch,loss_contrastive.item(), acc))
         iteration_number += 10
         counter.append(iteration_number)
         loss.append(loss_contrastive.item())
@@ -60,7 +63,7 @@ def main():
     net = siamese().cuda()
     criterion = contrastive_loss()
     optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=0.0005)
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     siamese_dataset = face_dataset(
         args.data_path,
         transforms=transforms.Compose([transforms.Resize(96),transforms.ToTensor()]),

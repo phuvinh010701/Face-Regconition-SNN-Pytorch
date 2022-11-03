@@ -26,12 +26,24 @@ class contrastive_loss(nn.Module):
         super(contrastive_loss, self).__init__()
         self.margin = margin
 
-    def forward(self, x0, x1, y):
-        
-        diff = x0 - x1
+    def diff(self, x0, x1):
+        return x0 -x1
+
+    def accuracy(self, x0, x1, y):
+        diff = self.diff(x0, x1)
         dist_sq = torch.sum(torch.pow(diff, 2), 1)
         dist = torch.sqrt(dist_sq)
 
+        res = torch.Tensor([1 if dist_ < 0.4 else 0 for dist_ in dist]).cuda()
+        acc = torch.sum(res == dist) / len(y)
+
+        return acc
+    def forward(self, x0, x1, y):
+        
+        diff = self.diff(x0, x1)
+        dist_sq = torch.sum(torch.pow(diff, 2), 1)
+        dist = torch.sqrt(dist_sq)
+    
         mdist = self.margin - dist
         dist = torch.clamp(mdist, min=0.0)
         loss = y * dist_sq + (1 - y) * torch.pow(dist, 2)
