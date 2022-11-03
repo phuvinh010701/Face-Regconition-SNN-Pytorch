@@ -16,9 +16,6 @@ class face_dataset():
         img1 = Image.open(img1_path)
         img2 = Image.open(img2_path)
 
-        img1 = img1.convert("L")
-        img2 = img2.convert("L")
-
         if self.transforms is not None:
             img1 = self.transforms(img1)
             img2 = self.transforms(img2)
