@@ -26,7 +26,8 @@ class contrastive_loss(nn.CosineEmbeddingLoss):
         super(contrastive_loss, self).__init__()
 
     def accuracy(self, x0, x1, y):
-        dist = nn.CosineSimilarity(x0, x1)
+        cos = nn.CosineSimilarity(dim=1)
+        dist = cos(x0, x1)
         pred = [1 if dist_ < 0.4 else 0 for dist_ in dist]
         acc = torch.sum(pred == y) / len(y)
         return acc
