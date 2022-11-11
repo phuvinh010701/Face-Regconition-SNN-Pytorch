@@ -3,7 +3,7 @@ import pandas as pd
 import glob2
 import numpy as np
 
-folder_path = "./Extracted_Faces/*"
+folder_path = "../Extracted_Faces/*"
 folder_imgs = glob2.glob(folder_path)
 list_path_img = [glob2.glob(folder_img + "/*") for folder_img in folder_imgs]
 
@@ -35,8 +35,8 @@ for i in range(balance_data):
         path2 = np.random.choice(list_path_img[idx2], 1)[0][2:]
         imgs1.append(path1)
         imgs2.append(path2)
-        labels.append(-1)
+        labels.append(0)
 
 dict_ = {"img1": imgs1, "img2": imgs2, "label": labels}
 df = pd.DataFrame(dict_)
-df.to_csv('./data_path.csv', header=True, index=False)
+df.to_csv('../data_path.csv', header=True, index=False)
