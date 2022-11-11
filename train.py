@@ -58,8 +58,8 @@ def parser():
 def main():
     args = parser()
     net = siamese().cuda()
-    criterion = contrastive_loss()
-    optimizer = torch.optim.Adam(net.parameters(), lr=1e-3, weight_decay=0.0005)
+    criterion = contrastive_loss(margin=0.4)
+    optimizer = torch.optim.Adam(net.parameters())
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     siamese_dataset = face_dataset(
         args.data_path,
@@ -67,7 +67,7 @@ def main():
     )
 
     train_dataloader = torch.utils.data.DataLoader(
-        siamese_dataset, shuffle=True, batch_size=args.batch_size
+        siamese_dataset, shuffle=True, batch_size=args.batch_size, num_workers=4
     )
     model = train(net, train_dataloader, optimizer, criterion, args.epochs)
     torch.save(model.state_dict(), "output/model.pt")
