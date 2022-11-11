@@ -20,14 +20,24 @@ class siamese(nn.Module):
         output2 = self.forward_once(input2)
         return output1, output2
 
-class contrastive_loss(nn.CosineEmbeddingLoss):
+class contrastive_loss(nn.Module):
+    def __init__(self):
+        super(contrastive_loss, self).__init__()
 
-    def __init__(self, margin: float = 0.4, size_average=None, reduce=None, reduction: str = 'mean') -> None:
-        super().__init__(margin)
+    def forward(self, x0, x1, y):
 
-    def accuracy(self, x0, x1, y):
-        cos = nn.CosineSimilarity(dim=1)
-        dist = cos(x0, x1)
-        pred = torch.Tensor([1 if dist_ < 0.001 else -1 for dist_ in dist]).cuda()
-        acc = torch.sum(pred == y) / len(y)
-        return acc
+        dist_sq = ((x0 - x1)**2).sum(axis=1)
+
+        dist = torch.sqrt(dist_sq)
+        pred = torch.Tensor([1 if dist_ < 0.05 else 0 for dist_ in dist]).cuda()
+        acc = torch.mean(torch.sum(pred == y))
+        mdist = self.margin - dist
+        dist = torch.clamp(mdist, min=0.0)
+
+        loss = y*dist_sq + (1-y)*torch.pow(dist, 2)
+        loss = torch.mean(loss)
+
+        return loss, acc
+
+
+
